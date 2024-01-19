@@ -13,7 +13,7 @@ services:
     build:
       context: ./dashboard
     ports:
-      - "5001:5000"
+      - "5002:5002"
     depends_on:
       - mongodb
 
@@ -21,7 +21,7 @@ services:
     build:
       context: ./admin
     ports:
-      - "5002:5000"
+      - "5001:5001"
     depends_on:
       - mongodb
 
