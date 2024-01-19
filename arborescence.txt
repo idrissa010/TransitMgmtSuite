@@ -1,0 +1,64 @@
+|-- Project/
+|   |-- achat_des_titres/
+|   |   |-- static/
+|   |   |   |-- css/
+|   |   |   |   |-- style.css
+|   |   |   |-- js/
+|   |   |   |-- img/
+|   |   |-- templates/
+|   |   |   |-- base.html
+|   |   |   |-- home.html
+|   |   |   |-- about.html
+|   |   |-- app/
+|   |   |   |-- __init__.py
+|   |   |   |-- routes.py
+|   |   |   |-- models.py
+|   |   |   |-- forms.py
+|   |   |   |-- static/
+|   |   |   |   |-- css/
+|   |   |   |   |   |-- custom.css
+|   |   |   |   |-- js/
+|   |   |   |   |-- img/
+|   |   |-- config.py
+|   |   |-- requirements.txt
+|   |   |-- run.py
+|   |   |-- Dockerfile
+|   |-- dashboard/
+|   |   |-- static/
+|   |   |   |-- css/
+|   |   |   |   |-- style.css
+|   |   |   |-- js/
+|   |   |   |-- img/
+|   |   |-- templates/
+|   |   |   |-- base.html
+|   |   |   |-- home.html
+|   |   |   |-- about.html
+|   |   |-- app/
+|   |   |   |-- __init__.py
+|   |   |-- config.py
+|   |   |-- requirements.txt
+|   |   |-- run.py
+|   |   |-- Dockerfile
+|   |-- admin/
+|   |   |-- static/
+|   |   |   |-- css/
+|   |   |   |   |-- style.css
+|   |   |   |-- js/
+|   |   |   |-- img/
+|   |   |-- templates/
+|   |   |   |-- base.html
+|   |   |   |-- home.html
+|   |   |   |-- about.html
+|   |   |-- app/
+|   |   |   |-- __init__.py
+|   |   |-- config.py
+|   |   |-- requirements.txt
+|   |   |-- run.py
+|   |   |-- Dockerfile
+|-- |-- backend/
+|   |-- Dockerfile
+|-- |-- microservice/
+|   |-- Dockerfile
+|-- |-- mongodb_data/
+|-- docker-compose.yaml
+|-- .git/

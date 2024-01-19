@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  achat_des_titres:
+    build:
+      context: ./achat_des_titres
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+
+  dashboard:
+    build:
+      context: ./dashboard
+    ports:
+      - "5001:5000"
+    depends_on:
+      - mongodb
+
+  admin:
+    build:
+      context: ./admin
+    ports:
+      - "5002:5000"
+    depends_on:
+      - mongodb
+
+  backend:
+    build:
+      context: ./backend
+
+  microservice:
+    build:
+      context: ./microservice
+
+  mongodb:
+    image: "mongo:latest"
+    volumes:
+      - ./mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
