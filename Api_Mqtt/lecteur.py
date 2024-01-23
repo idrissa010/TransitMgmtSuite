@@ -8,6 +8,8 @@ import qrcode
 import json
 import paho.mqtt.client as mqtt
 from flask import Flask
+import asyncio
+from aiocoap import Context, Message, POST, PUT
 
 #config de mosquitto
 mqtt_broker_address = "localhost"
@@ -17,6 +19,13 @@ mqtt_client = mqtt.Client()
 mqtt_client.connect(mqtt_broker_address, mqtt_broker_port)
 
 lecteur = Flask(__name__)
+
+@lecteur.route('/envoyer_coap')
+def envoyer_coap():
+    # Créer et envoyer une requête CoAP
+    request = Message(code=PUT, uri='coap://adresse_du_serveur_coap/chemin_coap', payload=b'Données à envoyer')
+    response = Context.request(request).response
+
 
 @lecteur.route('/recois_qr')
 def lecture_qr_code():

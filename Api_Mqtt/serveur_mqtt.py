@@ -8,8 +8,6 @@ import qrcode
 import json
 import paho.mqtt.client as mqtt
 import requests
-import asyncio
-from aiocoap import Context, Message, POST
 
 # Envoyer les données à l'API Flask
 api_url = "http://localhost:5000"
