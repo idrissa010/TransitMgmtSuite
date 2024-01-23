@@ -1,0 +1,1 @@
+#il recoit des données du lecteur par protocole coap, si c'est ok print vert, si c'est ko print rouge.
