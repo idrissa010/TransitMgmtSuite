@@ -20,10 +20,7 @@ class CoAPResource(resource.Resource):
     def __init__(self):
         super().__init__()
 
-@app.route('/')
-def Hello_world():
-    global coap_message
-    return f"coap_message : {coap_message.payload}"
+
 
 def run_flask():
     app.run(port=5000)
@@ -44,12 +41,21 @@ async def coap_server():
         else:
             print('Result: %s\n%r'%(coap_message.code, coap_message.payload))
 
+async def run_coap_server():
+    loop = asyncio.get_event_loop()
+    await loop.run_in_executor(None, coap_server)
+
+@app.route('/')
+def Hello_world():
+    #global coap_message
+    #return f"coap_message : {coap_message.payload}"
+    return "hello world"
 
 async def main():
     with ThreadPoolExecutor() as executor:
         await asyncio.gather(
             asyncio.get_running_loop().run_in_executor(executor, run_flask),
-            coap_server()
+            run_coap_server()
         )
         
 if __name__ == "__main__":

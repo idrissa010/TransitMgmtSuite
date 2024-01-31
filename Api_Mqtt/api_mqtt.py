@@ -16,7 +16,7 @@ api_mqtt = Flask(__name__)
 # Configuration de MongoDB
 mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = mongo_client["RT_0707"]
-collection = db["user"]
+collection = db["users_site"]
 
 @api_mqtt.route("/verif_qrcode", methods=['POST'])
 def verif_qrcode():
@@ -25,6 +25,17 @@ def verif_qrcode():
     prenom = data.get('prenom')
     print(f"Nom reçu: {nom}")
     print(f"Prénom reçu: {prenom}")
+    collections_list = db.list_collection_names()
+    # Affichage des noms des collections
+    print("AFFICHAGE DES COLLECITOSN DE MONGO DB")
+    for collection_name in collections_list:
+        print(collection_name)
+    print("TOUTES LES DONN2ES DANS MONGO DB")
+    all_user_data = collection.find()
+    count_documents = collection.count_documents({})
+    print("Nombre total de documents :", count_documents)
+    for user_data in all_user_data:
+        print("user", user_data)
     # Faire ce que vous avez besoin de faire avec les données reçues
     # Vérification dans la base de données MongoDB
     query = {"nom": nom, "prenom": prenom}
