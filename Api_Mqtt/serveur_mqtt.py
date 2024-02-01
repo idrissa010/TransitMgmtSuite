@@ -11,6 +11,9 @@ import requests
 import asyncio
 import aiocoap.resource as resource
 import aiocoap
+from aiocoap import Context, Message
+import aiocoap
+
 
 # Envoyer les données à l'API Flask
 api_url = "http://localhost:5000"
@@ -27,6 +30,20 @@ async def mqtt_handler():
     mqtt_broker_port = 1883
     mqtt_topic = "topic/qr_data"
     mqtt_client = mqtt.Client()
+
+    async def send_coap_request(status):
+        print("status is ",status)
+        # Faire une requête get au serveur CoAP
+        protocol = await Context.create_client_context()
+        request = Message(code=GET, uri='coap://localhost/lecteur')
+        try:
+            response = await protocol.request(request).response
+        except Exception as e:
+            print('Failed to fetch resource:')
+            print(e)
+        else:
+            print('Result: %s'%(response.payload))
+
 
     def on_message(client, userdata, message):
         payload = message.payload.decode()
@@ -46,10 +63,12 @@ async def mqtt_handler():
             status = api_response.get("status")
             if status == "success":
                 #Bon, il faut envoyer la réponse positive avec le protocole coap
-                print("ok")
+                print("porte ouverte")
+                #await send_coap_request("ouvert")
             else:
                 #envoyer la réponse négative avec le protocole coap
-                print ("ok")
+                print ("porte fermé")
+                #await send_coap_request("fermé")
         else:
             print("erreur de connexion")
 
@@ -58,7 +77,8 @@ async def mqtt_handler():
     mqtt_client.subscribe(mqtt_topic)
     mqtt_client.loop_start()
 
-class LecteurResource(resource.Resource):
+class ServeurResource(resource.Resource):
+
     async def render_get(self, request):
         payload = "Messsage de serveur_coap redner get".encode('utf-8')
         return aiocoap.Message(payload=payload)
@@ -69,7 +89,7 @@ class LecteurResource(resource.Resource):
 
 async def coap_server():
     root = resource.Site()
-    root.add_resource(['lecteur'], LecteurResource())
+    root.add_resource(['serveur'], ServeurResource())
     await aiocoap.Context.create_server_context(root)
     # Run forever
     await asyncio.get_running_loop().create_future()
@@ -77,9 +97,5 @@ async def coap_server():
 async def main():
     await asyncio.gather(coap_server(), mqtt_handler())
 
-
 if __name__ == '__main__':
     asyncio.run(main())
-    # Configuration du client MQTT
-    #config de mosquitto
-    #mqtt_client.loop_forever()
