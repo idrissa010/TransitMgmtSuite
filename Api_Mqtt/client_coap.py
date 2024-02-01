@@ -14,6 +14,9 @@ async def main():
 
     try:
         response = await protocol.request(request).response
+    except asyncio.TimeoutError:
+        # Handle timeout (server did not respond within the specified time)
+        print('Timeout: Server did not respond within 2 seconds')
     except Exception as e:
         print('Failed to fetch resource:')
         print(e)

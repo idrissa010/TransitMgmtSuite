@@ -25,11 +25,13 @@ lecteur = Flask(__name__)
 
 async def envoyer_message_coap(status):
     # Faire une requête get au serveur CoAP
+    print("envoyer message à porte")
+    await asyncio.sleep(2)
     protocol = await Context.create_client_context()
     payload_data = status.encode('utf-8')
     request = Message(code=GET,payload = payload_data, uri='coap://localhost/porte')
     try:
-        response = await protocol.request(request).response
+        response = await asyncio.wait_for(protocol.request(request).response, timeout=2)
     except Exception as e:
         print('Failed to fetch resource:')
         print(e)
@@ -41,9 +43,10 @@ class LecteurResource(resource.Resource):
     async def render_get(self, request):
         resultat = request.payload.decode('utf-8')
         print("Porte : ",resultat)
-        await envoyer_message_coap(resultat)
         payload = "Messsage du lecteur render get".encode('utf-8')
-        return aiocoap.Message(payload=payload)
+        response = aiocoap.Message(payload=payload)
+        asyncio.create_task(envoyer_message_coap(resultat))
+        return response
     
     async def render_put(self, request):
         payload = "Messsage du lecrteur render put".encode('utf-8')
@@ -88,11 +91,11 @@ async def lecture_qr_code():
     print (prenom)
         # Envoyer les données via MQTT*
     mqtt_client.publish(mqtt_topic, json.dumps({"nom": nom, "prenom": prenom}))
-    await recevoir_message_coap()
+    #await recevoir_message_coap()
     return send_file("qr1.png", mimetype="image/png")
 
 def run_flask():
-    lecteur.run(debug=True, port=3000, use_reloader=False)
+    lecteur.run(debug=True, port=4000, use_reloader=False)
 
 """async def run_coap_server_lecteur():
     await coap_server_lecteur()"""

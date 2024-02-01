@@ -13,6 +13,10 @@ import aiocoap.resource as resource
 import aiocoap
 from aiocoap import Context, Message
 import aiocoap
+import logging
+import asyncio
+
+from aiocoap import *
 
 
 # Envoyer les données à l'API Flask
@@ -25,52 +29,62 @@ async def handle_get(request):
     payload = b"OK"
     return aiocoap.Message(payload=payload)
 
+async def send_coap_request(status):
+    #await asyncio.sleep(3)
+    print("status is ",status)
+    # Faire une requête get au serveur CoAP
+    payload_data = status.encode('utf-8')
+    protocol = await Context.create_client_context()
+    request = Message(code=GET,payload = payload_data, uri='coap://localhost/lecteur')
+    try:
+         response = await asyncio.wait_for(protocol.request(request).response, timeout=2)
+    except asyncio.TimeoutError:
+        # Handle timeout (server did not respond within the specified time)
+        print('Timeout: Server did not respond within 2 seconds')
+    
+    except Exception as e:
+        print('Failed to fetch resource:')
+        print(e)
+    
+    else:
+        print('Result: %s'%(response.payload))
+    return 
+
+def on_message(client, userdata, message):
+    payload = message.payload.decode()
+    json_data = json.loads(payload)
+    nom = json_data.get("nom")
+    prenom = json_data.get("prenom")
+    print(nom)
+    print(prenom)
+    #print(f"Message reçu sur le sujet {message.topic}: {payload}")
+    data = {"nom": nom, "prenom": prenom}
+    response = requests.post(api_url + "/verif_qrcode", json=data)
+
+    if response.ok:
+        # Récupérer la réponse JSON
+        api_response = response.json()
+        print("Réponse de l'API:", api_response)
+        status = api_response.get("status")
+        if status == "success":
+            #Bon, il faut envoyer la réponse positive avec le protocole coap
+            resultat = "ouverte"
+            print("porte ouverte")
+            #await send_coap_request("ouvert")
+        else:
+            #envoyer la réponse négative avec le protocole coap
+            resultat = "fermé"
+            print ("porte fermé")
+            #await send_coap_request("fermé")
+    else:
+        print("erreur de connexion")
+    asyncio.run(send_coap_request(resultat))
+
 async def mqtt_handler():
     mqtt_broker_address = "localhost"
     mqtt_broker_port = 1883
     mqtt_topic = "topic/qr_data"
     mqtt_client = mqtt.Client()
-
-    async def send_coap_request(status):
-        print("status is ",status)
-        # Faire une requête get au serveur CoAP
-        protocol = await Context.create_client_context()
-        request = Message(code=GET, uri='coap://localhost/lecteur')
-        try:
-            response = await protocol.request(request).response
-        except Exception as e:
-            print('Failed to fetch resource:')
-            print(e)
-        else:
-            print('Result: %s'%(response.payload))
-
-
-    def on_message(client, userdata, message):
-        payload = message.payload.decode()
-        json_data = json.loads(payload)
-        nom = json_data.get("nom")
-        prenom = json_data.get("prenom")
-        print(nom)
-        print(prenom)
-        #print(f"Message reçu sur le sujet {message.topic}: {payload}")
-        data = {"nom": nom, "prenom": prenom}
-        response = requests.post(api_url + "/verif_qrcode", json=data)
-
-        if response.ok:
-            # Récupérer la réponse JSON
-            api_response = response.json()
-            print("Réponse de l'API:", api_response)
-            status = api_response.get("status")
-            if status == "success":
-                #Bon, il faut envoyer la réponse positive avec le protocole coap
-                print("porte ouverte")
-                #await send_coap_request("ouvert")
-            else:
-                #envoyer la réponse négative avec le protocole coap
-                print ("porte fermé")
-                #await send_coap_request("fermé")
-        else:
-            print("erreur de connexion")
 
     mqtt_client.on_message = on_message
     mqtt_client.connect(mqtt_broker_address, mqtt_broker_port)
