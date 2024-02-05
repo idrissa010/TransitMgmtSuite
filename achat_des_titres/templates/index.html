@@ -1,0 +1,108 @@
+{% include 'header.html' %}
+
+    
+    <section class="banner" id="top">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="left-side">
+                        <!-- <div class="logo">
+                            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Flight Template">
+                        </div>  -->
+                        <div class="tabs-content" hidden>
+                            <h4>Choose Your Direction:</h4>
+                            <ul class="social-links">
+                                <li><a href="http://facebook.com">Find us on <em>Facebook</em><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="http://youtube.com">Our <em>YouTube</em> Channel<i class="fa fa-youtube"></i></a></li>
+                                <li><a href="http://instagram.com">Follow our <em>instagram</em><i class="fa fa-instagram"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 col-md-offset-1">
+                    <div class="logo">
+                        <button id="logout-button" class="btn btn-warning">Signin</button>
+                    </div> 
+                    <section id="first-tab-group" class="tabgroup">
+                        <div id="tab1">
+                            <div class="submit-form">
+                                <h4>Buy your ticket:</h4>
+                                <form id="form-submit" action="" method="get">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <fieldset>
+                                                <label for="type_ticket">Type:</label>
+                                                <select required name='type_ticket' onchange='this.form.()'>
+                                                    <option value="">Select ticket...</option>
+                                                    <option value="Cambodia">1 Hour</option>
+                                                    <option value="Hong Kong">2 Hours</option>
+                                                    <option value="India">Day</option>
+                                                </select>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <fieldset>
+                                                <label for="validity_date">Validity date:</label>
+                                                <input name="validity_date" type="text" style="margin-top: 0px !important;" class="form-control date" id="validity_date" placeholder="Select date..." required="" onchange='this.form.()'>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <fieldset>
+                                                <button type="submit" id="form-submit" class="btn">Order Ticket Now</button>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                   
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <footer style="padding: 0px !important;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>Copyright &copy; 2023
+                
+                | Developped by : <em>Mohamed Bakri & Julien & Idrissa Sow</em></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+{% include 'footer.html' %}
+
+
+    <!-- <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="primary-button">
+                        <a href="#" class="scroll-top">Back To Top</a>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <ul class="social-icons">
+                        <li><a href="https://www.facebook.com/tooplate"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="#"><i class="fa fa-rss"></i></a></li>
+                        <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <p>Copyright &copy; 2018 Flight Tour and Travel Company
+                
+                | Design: <a href="http://www.code-projects.org" target="_parent"><em>Code Projects</em></a></p>
+                </div>
+            </div>
+        </div>
+    </footer> -->
+
+
+    
+
